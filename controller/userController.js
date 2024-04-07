@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 
 require('dotenv').config()
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
-const saltRounds = process.env.SALT_ROUNDS;
+const saltRounds = Number(process.env.SALT_ROUNDS);
 
 const userSignin = async(req,res)=>{
         const email = req.body.email;
@@ -41,7 +41,9 @@ const userSignin = async(req,res)=>{
             try {
                 const name = req.body.name;
                 const hashValue = await bcrypt.hash(password,saltRounds);
+                console.log("hased password is",hashValue )
                 const user = await User.findOne({email});
+                console.log("user inside the database",user)
                 if(user){
                     return res.status(404).json({
                         message:"Already a User"
